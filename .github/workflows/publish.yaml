@@ -1,14 +1,15 @@
 name: publish
 
-# Publishes the package to npm on every version tag (v0.1.0, v0.2.0-beta.1, ...).
-# The tag must match the "version" in package.json; pre-release versions go to the "next" dist-tag.
+# Publishes the package to npm on every version tag (v0.1.0, v0.2.0-beta.1, ...) through npm trusted
+# publishing (GitHub OIDC, no token). The tag must match the "version" in package.json; pre-release
+# versions go to the "next" dist-tag. A version that is already on npm is skipped.
 on:
   push:
     tags: ["v*"]
 
 permissions:
   contents: read
-  id-token: write   # npm provenance
+  id-token: write   # npm trusted publishing (OIDC) and provenance
 
 jobs:
   publish:
@@ -36,10 +37,14 @@ jobs:
           fi
 
       - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          case "$GITHUB_REF_NAME" in
-            *-*) npm publish --provenance --tag next ;;
-            *)   npm publish --provenance ;;
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already on npm, skipping"
+            exit 0
+          fi
+          case "$version" in
+            *-*) npm publish --tag next ;;
+            *)   npm publish ;;
           esac

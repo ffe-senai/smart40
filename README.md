@@ -79,9 +79,9 @@ O workflow [`publish.yaml`](.github/workflows/publish.yaml) publica no npm a cad
 1. Atualize a versão: `npm version 0.2.0` (cria o commit e a tag `v0.2.0`).
 2. Envie: `git push --follow-tags`.
 
-A tag precisa bater com a `version` do `package.json`. Versões de pré-release (`0.2.0-beta.1`) vão para a dist-tag `next`.
+A tag precisa bater com a `version` do `package.json`. Versões de pré-release (`0.2.0-beta.1`) vão para a dist-tag `next`. Uma versão que já está no npm é ignorada.
 
-Requisitos no repositório: o secret `NPM_TOKEN`, um token do npm com permissão de publicação no escopo `@ffe-senai`.
+A publicação usa o [trusted publishing](https://docs.npmjs.com/trusted-publishers) do npm (OIDC do GitHub Actions), sem token guardado no repositório. Configuração no npm, em **`@ffe-senai/smart40` → Settings → Trusted Publisher → GitHub Actions**: organização `ffe-senai`, repositório `smart40`, workflow `publish.yaml`.
 
 ## Desenvolvimento
 
