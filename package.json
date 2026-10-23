@@ -1,0 +1,39 @@
+{
+  "name": "@ffe-senai/smart40",
+  "version": "0.1.0",
+  "description": "Contrato de eventos SMART 4.0, bus (window CustomEvent) e dev-tools para os módulos da Estação SMART 4.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dev-tools": {
+      "types": "./dist/dev-tools.d.ts",
+      "import": "./dist/dev-tools.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": [
+    "./dist/dev-tools.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ffe-senai/smart40.git"
+  },
+  "homepage": "https://github.com/ffe-senai/smart40#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3"
+  }
+}
